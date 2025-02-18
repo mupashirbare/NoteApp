@@ -33,7 +33,15 @@
         }
         h2 {
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            color: #00796B;
+        }
+        .note-form {
+            background: #F1F8E9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
         }
         select, input, textarea, button {
             width: 100%;
@@ -48,6 +56,7 @@
             color: white;
             border: none;
             cursor: pointer;
+            transition: 0.3s ease;
         }
         button:hover {
             background-color: #004D40;
@@ -85,7 +94,7 @@
             padding: 15px;
             background: #00796B;
             color: white;
-            margin-top: 20px;
+            margin-top: 0; /* Removed footer margin-bottom issue */
         }
         @media (max-width: 480px) {
             .container {
@@ -106,16 +115,18 @@
     <div class="navbar">Modern Notes App</div>
     <div class="container">
         <h2>Create a Note</h2>
-        <select id="category">
-            <option value="Poem">Poem</option>
-            <option value="Work">Work</option>
-            <option value="History">History</option>
-            <option value="Dream">Dream</option>
-            <option value="Goals">Goals</option>
-        </select>
-        <input type="text" id="title" placeholder="Title">
-        <textarea id="noteInput" placeholder="Write your note here..."></textarea>
-        <button onclick="saveNote()">Save Note</button>
+        <div class="note-form">
+            <select id="category">
+                <option value="Poem">Poem</option>
+                <option value="Work">Work</option>
+                <option value="History">History</option>
+                <option value="Dream">Dream</option>
+                <option value="Goals">Goals</option>
+            </select>
+            <input type="text" id="title" placeholder="Title">
+            <textarea id="noteInput" placeholder="Write your note here..."></textarea>
+            <button onclick="saveNote()">Save Note</button>
+        </div>
         <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="searchNotes()">
         <div class="table-container">
             <table class="note-table">
