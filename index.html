@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Notes App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00796B;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #004D40;
+        }
+        .note-list {
+            margin-top: 20px;
+        }
+        .note {
+            background: #e0f7fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .delete-btn {
+            background-color: #d32f2f;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        @media (max-width: 480px) {
+            .container {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Modern Notes App</h2>
+        <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="searchNotes()">
+        <textarea id="noteInput" placeholder="Write your note here..."></textarea>
+        <button onclick="addNote()">Save Note</button>
+        <div id="notesList" class="note-list"></div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", loadNotes);
+
+        function addNote() {
+            let noteText = document.getElementById("noteInput").value;
+            if (noteText.trim() === "") return;
+
+            let notes = JSON.parse(localStorage.getItem("notes")) || [];
+            notes.push(noteText);
+            localStorage.setItem("notes", JSON.stringify(notes));
+            document.getElementById("noteInput").value = "";
+            loadNotes();
+        }
+
+        function loadNotes() {
+            let notesList = document.getElementById("notesList");
+            notesList.innerHTML = "";
+            let notes = JSON.parse(localStorage.getItem("notes")) || [];
+
+            notes.forEach((note, index) => {
+                let noteElement = document.createElement("div");
+                noteElement.classList.add("note");
+                noteElement.innerHTML = `
+                    <span>${note}</span>
+                    <button class="delete-btn" onclick="deleteNote(${index})">Delete</button>
+                `;
+                notesList.appendChild(noteElement);
+            });
+        }
+
+        function deleteNote(index) {
+            let notes = JSON.parse(localStorage.getItem("notes")) || [];
+            notes.splice(index, 1);
+            localStorage.setItem("notes", JSON.stringify(notes));
+            loadNotes();
+        }
+
+        function searchNotes() {
+            let query = document.getElementById("searchInput").value.toLowerCase();
+            let notes = document.querySelectorAll(".note");
+            notes.forEach(note => {
+                let text = note.textContent.toLowerCase();
+                note.style.display = text.includes(query) ? "flex" : "none";
+            });
+        }
+    </script>
+</body>
+</html>
