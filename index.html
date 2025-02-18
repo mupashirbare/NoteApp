@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Notes App</title>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #E0F7FA;
             margin: 0;
             padding: 0;
+            color: #004D40;
         }
         .navbar {
             background: #00796B;
@@ -53,18 +55,20 @@
         .note-table {
             width: 100%;
             border-collapse: collapse;
+            overflow-x: auto;
+            display: block;
         }
         .note-table th, .note-table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
+            min-width: 120px;
         }
         .note-table th {
             background-color: #00796B;
             color: white;
         }
         .actions button {
-            margin-right: 5px;
             background: none;
             border: none;
             cursor: pointer;
@@ -88,6 +92,13 @@
                 width: 100%;
                 padding: 15px;
             }
+            .note-table {
+                display: block;
+                overflow-x: auto;
+            }
+            .actions button {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -106,17 +117,19 @@
         <textarea id="noteInput" placeholder="Write your note here..."></textarea>
         <button onclick="saveNote()">Save Note</button>
         <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="searchNotes()">
-        <table class="note-table">
-            <thead>
-                <tr>
-                    <th>Category</th>
-                    <th>Title</th>
-                    <th>Note</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="notesList"></tbody>
-        </table>
+        <div class="table-container">
+            <table class="note-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Title</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="notesList"></tbody>
+            </table>
+        </div>
     </div>
     <div class="footer">&copy; 2025 Modern Notes App. All Rights Reserved.</div>
     <script>
@@ -148,8 +161,8 @@
                     <td>${note.title}</td>
                     <td>${note.noteText}</td>
                     <td class="actions">
-                        <button onclick="editNote(${index})"><i class="fas fa-edit"></i></button>
-                        <button onclick="deleteNote(${index})"><i class="fas fa-trash"></i></button>
+                        <button onclick="editNote(${index})"><i class="bi bi-pencil-square"></i></button>
+                        <button onclick="deleteNote(${index})"><i class="bi bi-trash"></i></button>
                     </td>
                 `;
                 notesList.appendChild(row);
