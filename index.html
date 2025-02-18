@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modern Notes App</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            padding: 0;
+        }
+        .navbar {
+            background: #00796B;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
         }
         .container {
             width: 90%;
-            max-width: 600px;
+            max-width: 800px;
             background: white;
             padding: 20px;
+            margin: 20px auto;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
@@ -27,7 +33,7 @@
             text-align: center;
             margin-bottom: 10px;
         }
-        input, textarea {
+        select, input, textarea, button {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -36,37 +42,46 @@
             font-size: 16px;
         }
         button {
-            width: 100%;
-            padding: 10px;
             background-color: #00796B;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
         }
         button:hover {
             background-color: #004D40;
         }
-        .note-list {
-            margin-top: 20px;
+        .note-table {
+            width: 100%;
+            border-collapse: collapse;
         }
-        .note {
-            background: #e0f7fa;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .note-table th, .note-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
         }
-        .delete-btn {
-            background-color: #d32f2f;
+        .note-table th {
+            background-color: #00796B;
             color: white;
-            padding: 5px 10px;
+        }
+        .actions button {
+            margin-right: 5px;
+            background: none;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
+            font-size: 18px;
+        }
+        .actions button i {
+            color: #00796B;
+        }
+        .actions button:hover i {
+            color: #004D40;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background: #00796B;
+            color: white;
+            margin-top: 20px;
         }
         @media (max-width: 480px) {
             .container {
@@ -77,24 +92,46 @@
     </style>
 </head>
 <body>
+    <div class="navbar">Modern Notes App</div>
     <div class="container">
-        <h2>Modern Notes App</h2>
-        <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="searchNotes()">
+        <h2>Create a Note</h2>
+        <select id="category">
+            <option value="Poem">Poem</option>
+            <option value="Work">Work</option>
+            <option value="History">History</option>
+            <option value="Dream">Dream</option>
+            <option value="Goals">Goals</option>
+        </select>
+        <input type="text" id="title" placeholder="Title">
         <textarea id="noteInput" placeholder="Write your note here..."></textarea>
-        <button onclick="addNote()">Save Note</button>
-        <div id="notesList" class="note-list"></div>
+        <button onclick="saveNote()">Save Note</button>
+        <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="searchNotes()">
+        <table class="note-table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Title</th>
+                    <th>Note</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="notesList"></tbody>
+        </table>
     </div>
-
+    <div class="footer">&copy; 2025 Modern Notes App. All Rights Reserved.</div>
     <script>
         document.addEventListener("DOMContentLoaded", loadNotes);
 
-        function addNote() {
+        function saveNote() {
+            let category = document.getElementById("category").value;
+            let title = document.getElementById("title").value;
             let noteText = document.getElementById("noteInput").value;
-            if (noteText.trim() === "") return;
+            if (title.trim() === "" || noteText.trim() === "") return;
 
             let notes = JSON.parse(localStorage.getItem("notes")) || [];
-            notes.push(noteText);
+            notes.push({ category, title, noteText });
             localStorage.setItem("notes", JSON.stringify(notes));
+            document.getElementById("title").value = "";
             document.getElementById("noteInput").value = "";
             loadNotes();
         }
@@ -103,15 +140,19 @@
             let notesList = document.getElementById("notesList");
             notesList.innerHTML = "";
             let notes = JSON.parse(localStorage.getItem("notes")) || [];
-
+            
             notes.forEach((note, index) => {
-                let noteElement = document.createElement("div");
-                noteElement.classList.add("note");
-                noteElement.innerHTML = `
-                    <span>${note}</span>
-                    <button class="delete-btn" onclick="deleteNote(${index})">Delete</button>
+                let row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${note.category}</td>
+                    <td>${note.title}</td>
+                    <td>${note.noteText}</td>
+                    <td class="actions">
+                        <button onclick="editNote(${index})"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteNote(${index})"><i class="fas fa-trash"></i></button>
+                    </td>
                 `;
-                notesList.appendChild(noteElement);
+                notesList.appendChild(row);
             });
         }
 
@@ -122,12 +163,20 @@
             loadNotes();
         }
 
+        function editNote(index) {
+            let notes = JSON.parse(localStorage.getItem("notes")) || [];
+            document.getElementById("category").value = notes[index].category;
+            document.getElementById("title").value = notes[index].title;
+            document.getElementById("noteInput").value = notes[index].noteText;
+            deleteNote(index);
+        }
+
         function searchNotes() {
             let query = document.getElementById("searchInput").value.toLowerCase();
-            let notes = document.querySelectorAll(".note");
-            notes.forEach(note => {
-                let text = note.textContent.toLowerCase();
-                note.style.display = text.includes(query) ? "flex" : "none";
+            let rows = document.querySelectorAll(".note-table tbody tr");
+            rows.forEach(row => {
+                let text = row.textContent.toLowerCase();
+                row.style.display = text.includes(query) ? "table-row" : "none";
             });
         }
     </script>
