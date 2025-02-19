@@ -60,18 +60,24 @@ button:hover {
     background-color: #004D40;
 }
 
+/* Responsive Table */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
 .note-table {
     width: 100%;
     border-collapse: collapse;
-    overflow-x: auto;
-    display: block;
+    min-width: 600px;
 }
 
 .note-table th, .note-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px;
     text-align: left;
-    min-width: 120px;
 }
 
 .note-table th {
@@ -79,6 +85,7 @@ button:hover {
     color: white;
 }
 
+/* Actions */
 .actions button {
     background: none;
     border: none;
@@ -94,6 +101,35 @@ button:hover {
     color: #004D40;
 }
 
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+.page-btn {
+    background: #00796B;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: 0.3s;
+}
+
+.page-btn:hover {
+    background: #004D40;
+}
+
+.page-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+/* Footer */
 .footer {
     text-align: center;
     padding: 15px;
@@ -102,35 +138,19 @@ button:hover {
     margin-top: 20px;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-}
-
-.pagination button {
-    background: #00796B;
-    color: white;
-    padding: 8px 12px;
-    margin: 0 5px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.pagination button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-}
-
-@media (max-width: 480px) {
+/* Mobile Responsive */
+@media (max-width: 600px) {
     .container {
-        width: 100%;
+        width: 95%;
         padding: 15px;
     }
+    
     .note-table {
+        min-width: 100%;
         display: block;
         overflow-x: auto;
     }
+    
     .actions button {
         font-size: 16px;
     }
