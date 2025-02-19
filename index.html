@@ -23,7 +23,9 @@
             <textarea id="noteInput" placeholder="Write your note here..."></textarea>
             <button onclick="saveNote()">Save Note</button>
         </div>
+
         <input type="text" id="searchInput" placeholder="Search notes..." onkeyup="searchNotes()">
+
         <div class="table-container">
             <table class="note-table">
                 <thead>
@@ -37,12 +39,14 @@
                 <tbody id="notesList"></tbody>
             </table>
         </div>
+
         <div class="pagination">
-            <button id="prevPage">Prev</button>
+            <button id="prevPage" class="page-btn">Prev</button>
             <span id="pageInfo"></span>
-            <button id="nextPage">Next</button>
+            <button id="nextPage" class="page-btn">Next</button>
         </div>
     </div>
+
     <script src="script.js"></script>
     <div class="footer">&copy; 2025 Modern Notes App. All Rights Reserved.</div>
 </body>
