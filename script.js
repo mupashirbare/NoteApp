@@ -50,41 +50,5 @@ function loadNotes() {
     setupPagination();
 }
 
-function deleteNote(index) {
-    let notes = JSON.parse(localStorage.getItem("notes")) || [];
-    notes.splice(index, 1);
-    localStorage.setItem("notes", JSON.stringify(notes));
-    
-    loadNotes();
-    setupPagination();
-}
-
-function editNote(index) {
-    let notes = JSON.parse(localStorage.getItem("notes")) || [];
-    document.getElementById("category").value = notes[index].category;
-    document.getElementById("title").value = notes[index].title;
-    document.getElementById("noteInput").value = notes[index].noteText;
-    
-    deleteNote(index);
-}
-
-function searchNotes() {
-    let query = document.getElementById("searchInput").value.toLowerCase();
-    let rows = document.querySelectorAll(".note-table tbody tr");
-    rows.forEach(row => {
-        let text = row.textContent.toLowerCase();
-        row.style.display = text.includes(query) ? "table-row" : "none";
-    });
-}
-
-function setupPagination() {
-    let notes = JSON.parse(localStorage.getItem("notes")) || [];
-    let totalPages = Math.ceil(notes.length / notesPerPage);
-    
-    document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
-    document.getElementById("prevPage").disabled = currentPage === 1;
-    document.getElementById("nextPage").disabled = currentPage === totalPages;
-}
-
 document.getElementById("prevPage").addEventListener("click", () => { currentPage--; loadNotes(); });
 document.getElementById("nextPage").addEventListener("click", () => { currentPage++; loadNotes(); });
